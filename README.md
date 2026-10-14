@@ -46,7 +46,7 @@ python --version
 
 ### 2. 실습 폴더 복사
 
-받은 `kimm` 폴더(이 README가 있는 폴더)를 `C:\work\kimm` 으로 복사합니다. 한글이 들어간 경로(예: `바탕 화면`, `문서`)에 두지 않습니다.
+https://github.com/axwith/kimm-lab 에서 초록색 **Code → Download ZIP** 으로 받고, `다운로드` 의 `kimm-lab-main.zip` 을 오른쪽 버튼 **모두 압축 풀기...** 로 대상 `C:\work` 에 풉니다. 생긴 `C:\work\kimm-lab-main` 의 이름을 `kimm` 으로 바꿉니다. 그림이 있는 순서는 https://kimm.axwith.com 「시작 전 준비」에 있습니다. 한글이 들어간 경로(예: `바탕 화면`, `문서`)에 두지 않습니다.
 
 ```powershell
 Test-Path C:\work\kimm\first
@@ -95,13 +95,9 @@ py -3.12 -m venv .venv
 
 첫 줄은 `ok`, 둘째 줄은 `selftest 통과`, 셋째 줄은 `200` 이 나오면 됩니다. 셋째 줄이 인증서 오류(`CERTIFICATE_VERIFY_FAILED`)로 실패하면 사내 프록시나 파이썬 인증서 문제입니다. 실습 1은 예비 자료로 진행할 수 있습니다.
 
-### 6. 실습 전 폴더 백업
+### 6. 백업은 받은 ZIP
 
-```powershell
-Copy-Item C:\work\kimm C:\work\kimm_backup -Recurse
-```
-
-되돌리기 기능은 에이전트가 명령 실행으로 바꾼 파일을 복원하지 않습니다(제조사 문서). 막히면 이 백업에서 다시 시작합니다.
+내려받은 `kimm-lab-main.zip` 을 지우지 않고 `다운로드` 에 둡니다. 되돌리기 기능은 에이전트가 명령 실행으로 바꾼 파일을 복원하지 않습니다(제조사 문서). 폴더가 망가지면 `C:\work\kimm` 을 지우고 ZIP을 다시 풀어 처음 상태에서 시작합니다. 받는 순서는 https://kimm.axwith.com 「시작 전 준비」에 그림과 함께 있습니다.
 
 ### 7. 실습 2 자료 준비(선택)
 
