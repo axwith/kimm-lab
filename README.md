@@ -13,7 +13,6 @@
 | `first\` | 규칙도 스킬도 없는 빈 폴더. 인터넷이 막혔을 때 쓰는 예비 자료(`예비자료\openalex_연도별_논문수.csv`)와 강사 결과 그래프(`예비자료\모범결과\`)만 있음 | 실습 1 |
 | `research-planner\` | 연구 기획 워크스페이스. 규칙 파일(`CLAUDE.md`, 교육용 규칙 절 포함), 명령 13개(`/start` `/lit` `/grant` `/market` `/scenario` `/plan` `/paper` `/review` `/proposal` `/wrap` `/onboarding` `/kb` `/weekly`), 실습 스킬 `/lab2` `/lab2b` `/lab3` `/lab4`, 검토 담당 3개, 이력 훅과 세션 종료 대기열 훅, 검사·예약 실행 스크립트(`60-scripts`), 강의 뒤 KB 구축 안내(`KB-구축가이드.md`), 강사 따라 하기 자료(`examples\강사-따라하기\`), gptaku 플러그인 6개 자동 등록 설정. 이 폴더는 배포 zip에만 들어 있고 강의 폴더 `lab\` 에는 없음(`ops/make_dist.sh` 가 원본에 `ops/rp-overlay` 덧씌우기를 적용해 넣음). 사용법은 `research-planner\README.md` | 실습 2~4, 더 해 보기 |
 | `equipment\` | 모의 장비(pyvisa-sim)와 MCP 서버. 실습 4 ③은 `equipment\practice-mcp` 폴더로 세션을 엶 | 실습 4 ③ |
-| `.venv\` | 3단계에서 만드는 가상환경 | 전체 |
 | `TROUBLESHOOTING.md` | 막힐 때 대응표 | 강사·보조강사 |
 | `requirements.txt` | 실습용 Python 패키지(버전 고정) | 전원 |
 
@@ -56,50 +55,17 @@ Test-Path C:\work\kimm\equipment\practice-mcp\.mcp.json
 
 셋 다 `True`가 나오면 됩니다.
 
-### 3. 가상환경 만들기
+### 3. 패키지는 미리 설치하지 않아도 됩니다
 
-```powershell
-cd C:\work\kimm
-py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe --version
-```
+가상환경과 패키지는 미리 만들지 않습니다(2026-10-14 변경). 실습 중 Claude Code가 그래프 등에 필요한 패키지(matplotlib 등)를 쓰려 할 때 `pip install` 승인 창을 띄우고 설치합니다. 명령과 패키지 이름을 읽고 허용합니다. 미리 깔아 두고 싶다면 `python -m pip install -r requirements.txt` 를 실행합니다.
 
-`py`가 없으면 `python -m venv .venv` 로 만듭니다. 가상환경은 `C:\work\kimm\.venv` 에 둡니다. 가상환경은 **활성화하지 않고** 그 안의 파이썬을 직접 부르는 방식을 권합니다. 실행 정책 문제를 피할 수 있습니다.
+사내 프록시가 있으면 설치가 시간 초과나 인증서 오류(`CERTIFICATE_VERIFY_FAILED`)로 실패할 수 있습니다. 이 경우 실습 1은 `first\예비자료` CSV로 진행합니다. 〔현장 IT 확인 필요〕
 
-활성화해서 쓰고 싶다면 `.\.venv\Scripts\Activate.ps1` 을 실행합니다. `running scripts is disabled on this system` 오류가 나면 지금 연 창에서만 `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` 를 실행한 뒤 다시 활성화합니다. 기관 정책으로 이것도 막혀 있으면 활성화하지 말고 `.\.venv\Scripts\python.exe` 를 직접 씁니다.
-
-### 4. 패키지 설치
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m pip install -r equipment\requirements.txt
-```
-
-두 번째 줄은 실습 4 ③ 모의 장비(MCP)용입니다.
-
-사내 프록시가 있는 경우 `pip install` 이 시간 초과나 인증서 오류로 실패할 수 있습니다. IT 부서에 프록시 주소를 받아 `--proxy http://주소:포트` 를 붙이거나, 강사가 준비한 휠 파일 폴더로 설치합니다(`--no-index --find-links <폴더>`). 〔현장 IT 확인 필요〕
-
-모의 장비 MCP 서버는 데스크톱 앱이 실행합니다. 앱은 가상환경 활성화를 물려받지 않으므로, 사용자 환경 변수 `KIMM_PYTHON` 을 지정하고 **앱을 다시 시작**합니다. Windows 데스크톱 앱은 사용자·시스템 환경 변수를 물려받습니다(제조사 문서). 이 방법이 Windows에서 그대로 동작하는지는 실측하지 않았습니다. 안 되면 시스템 파이썬에 `python -m pip install --user -r equipment\requirements.txt` 로 설치합니다.
-
-```powershell
-[Environment]::SetEnvironmentVariable("KIMM_PYTHON", "C:\work\kimm\.venv\Scripts\python.exe", "User")
-```
-
-### 5. 확인 명령
-
-```powershell
-.\.venv\Scripts\python.exe -c "import numpy, matplotlib; print('ok')"
-.\.venv\Scripts\python.exe research-planner\60-scripts\check_planner.py --selftest
-.\.venv\Scripts\python.exe -c "import urllib.request; print(urllib.request.urlopen('https://api.openalex.org/works?filter=publication_year:2025&per-page=1', timeout=20).status)"
-```
-
-첫 줄은 `ok`, 둘째 줄은 `selftest 통과`, 셋째 줄은 `200` 이 나오면 됩니다. 셋째 줄이 인증서 오류(`CERTIFICATE_VERIFY_FAILED`)로 실패하면 사내 프록시나 파이썬 인증서 문제입니다. 실습 1은 예비 자료로 진행할 수 있습니다.
-
-### 6. 백업은 받은 ZIP
+### 4. 백업은 받은 ZIP
 
 내려받은 `kimm-lab-main.zip` 을 지우지 않고 `다운로드` 에 둡니다. 되돌리기 기능은 에이전트가 명령 실행으로 바꾼 파일을 복원하지 않습니다(제조사 문서). 폴더가 망가지면 `C:\work\kimm` 을 지우고 ZIP을 다시 풀어 처음 상태에서 시작합니다. 받는 순서는 https://kimm.axwith.com 「시작 전 준비」에 그림과 함께 있습니다.
 
-### 7. 실습 2 자료 준비(선택)
+### 5. 실습 2 자료 준비(선택)
 
 써 본 분은 실습 2에서 내 자료로 워크스페이스를 만듭니다. 참가자는 공개 자료 10개 이내를 미리 준비합니다(선택). 기관 내부 자료와 미공개 자료는 넣지 않습니다. 준비하지 않은 분은 강사 따라 하기 자료로 진행합니다. 실습 4의 예약 실행(매일 `/wrap`, 매주 `/weekly`)은 CLI(`claude` 명령)가 있어야 등록할 수 있습니다.
 
