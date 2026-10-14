@@ -118,6 +118,10 @@ Git for Windows가 없으면 에이전트가 명령 실행에 PowerShell을 씁�
 
 허용이 필요한 도메인: `api.anthropic.com`, `claude.ai`, `claude.com`, `platform.claude.com`, 설치·업데이트용 `downloads.claude.ai`. 실습 1·3은 `api.openalex.org`, `www.ntis.go.kr`, `www.iris.go.kr`, 플러그인 등록은 `github.com` 에 접속합니다. 사내 프록시가 TLS를 검사하면 `unable to get local issuer certificate` 같은 오류가 납니다. 이때는 IT 부서에 사내 인증서 파일을 받아 `NODE_EXTRA_CA_CERTS` 환경 변수로 지정합니다(제조사 문서 단독 근거, 현장 확인 필요).
 
+## +α 검색이 안 될 때 (선택)
+
+검색 도구로 내용이 안 읽히는 공개 페이지(공고 상세, 학술 DB 등)는 Aside 브라우저를 설치하면 Claude Code가 그 브라우저를 열어 읽습니다. 설치·Claude 연결·CLI와 스킬 설치 순서는 https://kimm.axwith.com 「+α. 검색이 안 될 때 — Aside」에 있고, 강의 때 강사 화면으로 같이 합니다. 로그인이 필요한 페이지와 기관 시스템에는 쓰지 않습니다.
+
 ## 강사용 메모
 
 - 오후 실습의 사전 실행 기록(2026-10-12, 중간 등급 모델, 헤드리스)은 강의 폴더 `_lab-archive\rehearsal-r3-20261012\` 에 있습니다(배포본에 없음). 실습 1은 28초, 실습 3 다섯 명령은 합계 약 7분 30초였습니다.
