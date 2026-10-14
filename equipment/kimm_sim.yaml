@@ -1,0 +1,89 @@
+# 가상 장비 정의 (pyvisa-sim). 실제 기계연 장비가 아니며 모든 수치는 실습용 가상값이다.
+# 원본: 리서치 단계의 kimm_sim.yaml(vibdaq·shaker)에 가진 주파수와 3축 진동대(table)를 더했다.
+# 여기 적은 min·max·valid는 "장치 쪽 상한"으로, 범위를 벗어난 명령에 장치가 ERROR로 답한다(1차 방어선).
+spec: "1.1"
+devices:
+  vibdaq:                        # 가상 진동 측정기(DAQ)
+    eom:
+      TCPIP INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "VIRTUAL-LAB,VIBDAQ-SIM,SN0001,1.0"
+      - q: "*RST"
+        r: "OK"
+    properties:
+      rate:                      # 샘플레이트, 가상 상한 5000
+        default: 1000
+        getter: {q: "ACQ:RATE?", r: "{:d}"}
+        setter: {q: "ACQ:RATE {:d}", r: "OK"}
+        specs: {min: 100, max: 5000, type: int}
+      range:                     # 측정 레인지(g), 목록 밖 값은 ERROR
+        default: 2.0
+        getter: {q: "CH1:RANGE?", r: "{:.1f}"}
+        setter: {q: "CH1:RANGE {:.1f}", r: "OK"}
+        specs: {valid: [0.5, 1.0, 2.0, 5.0, 10.0], type: float}
+      peak:                      # 측정 피크(g). SIM: 명령은 이상 상황을 흉내 내는 실습 전용 명령
+        default: 0.312
+        getter: {q: "MEAS:CH1:PEAK?", r: "{:.3f}"}
+        setter: {q: "SIM:CH1:PEAK {:.3f}", r: "OK"}
+        specs: {min: 0.0, max: 10.0, type: float}
+  shaker:                        # 가상 가진기 제어기
+    eom:
+      TCPIP INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "VIRTUAL-LAB,SHAKER-CTRL-SIM,SN0002,1.0"
+    properties:
+      output:                    # 출력 0=꺼짐, 1=켜짐
+        default: 0
+        getter: {q: "OUTP?", r: "{:d}"}
+        setter: {q: "OUTP {:d}", r: "OK"}
+        specs: {valid: [0, 1], type: int}
+      level:                     # 가진 레벨(가상 단위), 장치 상한 0.50
+        default: 0.10
+        getter: {q: "LEV?", r: "{:.2f}"}
+        setter: {q: "LEV {:.2f}", r: "OK"}
+        specs: {min: 0.0, max: 0.50, type: float}
+      freq:                      # 가진 주파수(Hz), 장치 범위 5~2000 (가상)
+        default: 50.0
+        getter: {q: "FREQ?", r: "{:.1f}"}
+        setter: {q: "FREQ {:.1f}", r: "OK"}
+        specs: {min: 5.0, max: 2000.0, type: float}
+  table:                         # 가상 3축 진동대, 축별 변위(mm)
+    eom:
+      TCPIP INSTR:
+        q: "\n"
+        r: "\n"
+    error: ERROR
+    dialogues:
+      - q: "*IDN?"
+        r: "VIRTUAL-LAB,TABLE3AX-SIM,SN0003,1.0"
+    properties:
+      pos_x:                     # X축 변위, 장치 상한 ±50 mm (가상)
+        default: 0.0
+        getter: {q: "POS:X?", r: "{:.1f}"}
+        setter: {q: "POS:X {:.1f}", r: "OK"}
+        specs: {min: -50.0, max: 50.0, type: float}
+      pos_y:                     # Y축 변위, 장치 상한 ±50 mm (가상)
+        default: 0.0
+        getter: {q: "POS:Y?", r: "{:.1f}"}
+        setter: {q: "POS:Y {:.1f}", r: "OK"}
+        specs: {min: -50.0, max: 50.0, type: float}
+      pos_z:                     # Z축 변위, 장치 상한 ±25 mm (가상)
+        default: 0.0
+        getter: {q: "POS:Z?", r: "{:.1f}"}
+        setter: {q: "POS:Z {:.1f}", r: "OK"}
+        specs: {min: -25.0, max: 25.0, type: float}
+resources:
+  TCPIP0::192.168.0.10::inst0::INSTR:
+    device: vibdaq
+  TCPIP0::192.168.0.11::inst0::INSTR:
+    device: shaker
+  TCPIP0::192.168.0.12::inst0::INSTR:
+    device: table

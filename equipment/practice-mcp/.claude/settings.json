@@ -1,0 +1,11 @@
+{
+  "enabledMcpjsonServers": ["kimm-equipment"],
+  "permissions": {
+    "allow": [
+      "mcp__kimm-equipment__get_status",
+      "mcp__kimm-equipment__read_peak",
+      "mcp__kimm-equipment__emergency_stop"
+    ],
+    "disableBypassPermissionsMode": "disable"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "kimm-equipment": {
+      "type": "stdio",
+      "command": "${KIMM_PYTHON:-python}",
+      "args": ["${KIMM_LAB_DIR:-..}/kimm_mcp_server.py"]
+    }
+  }
+}
