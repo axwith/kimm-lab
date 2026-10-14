@@ -1,7 +1,7 @@
 ---
 name: contradiction-finder
 description: "소스 사이와 문서 사이의 조용한 불일치를 찾아내는 검출자. 담당 영역: 상충 정보 검출 (선택) (Analyst). '문서끼리 안 맞는 데 찾아줘', '중복 기록 정합성 봐줘', '옛 수치 잔재 있는지 확인해줘' 같은 요청일 때 이 subagent에 위임합니다. 단, 단일 소스 신뢰도 판정은 citation-reviewer; 정본 결정은 methodology-oracle. 산출물: 구조화된 분석 보고 (표/요약/근거)."
-tools: Read, Grep, Glob, Bash, Write
+tools: Read, Bash, Write
 recommended-for: research
 source: workspace-builder/generator
 harness-archetype: Analyst

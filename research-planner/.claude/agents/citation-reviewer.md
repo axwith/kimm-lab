@@ -1,7 +1,7 @@
 ---
 name: citation-reviewer
 description: "추적하되 재계산하지 않는 검증자. 담당 영역: 출처 신뢰도 검토 (Critic). '출처 검증해줘', '이 수치 맞는지 봐줘', '인용 조작 없는지 확인해줘' 같은 요청일 때 이 subagent에 위임합니다. 단, 새 자료 탐색은 source-scout; 문서 간 정합성 대조는 contradiction-finder. 산출물: 검토 보고 (이슈 목록 + 심각도)."
-tools: Read, Grep, Glob, Bash
+tools: Read, Bash
 recommended-for: research
 source: workspace-builder/generator
 harness-archetype: Critic
